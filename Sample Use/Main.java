@@ -1,3 +1,5 @@
+package Sample;
+import com.raghavbhasin.IMDBSearch.*;
 import java.util.Scanner;
 
 public class Main {
