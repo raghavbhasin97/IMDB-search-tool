@@ -9,6 +9,7 @@ public class FetchSearch {
 	private URL host;
 	private URLConnection connection;
 	private BufferedReader reader = null;
+	private String address = null;
 	
 	//HTML TAGS
 	private final String IMDB_SEARCH = "http://www.imdb.com/find?ref_=nv_sr_fn&q=";
@@ -32,7 +33,7 @@ public class FetchSearch {
 	
 	private boolean do_actor = false;
 	private int number_of_actors = 0;
-	Movie movie;
+	Movie movie = new Movie();
 	
 	
 	FetchSearch(String name, boolean is_first_param_movie_name) 
@@ -44,7 +45,7 @@ public class FetchSearch {
 		url = IMDB_SEARCH + target + "&s=all";
 		} else
 		{
-			movie = new Movie();
+			
 			movie.setImdb_url(name);
 		}
 		try {
@@ -54,6 +55,11 @@ public class FetchSearch {
 			(connection.getInputStream()));
 		} catch (IOException e) {
 			
+		}
+		try {
+			this.scrape_web();
+		} catch (Exception e) {
+		
 		}
 	}
 	
@@ -67,7 +73,7 @@ public class FetchSearch {
 	}
 	
 	
-	public String scrape_web() throws Exception
+	private String scrape_web() throws Exception
 	{
 		String line = null;
 		String data = null;
@@ -87,12 +93,12 @@ public class FetchSearch {
 		catch (IOException e) {
 			
 		}
+		this.address = data;
 		this.reinit(data);
-		return data;
+		return this.address;
 	}
 	
 	private void reinit(String url) {
-		movie = new Movie();
 		movie.setImdb_url(url);
 		try {
 			host = new URL(url);
@@ -151,16 +157,17 @@ public class FetchSearch {
 		try {
 			while ((line = reader.readLine()) != null) {
 				
-				if(line.contains(TYPE_TAG)) 
+				if(line.contains(TYPE_TAG)) {
+					this.reinit(address);
 					return true;
-				
-				
+				}
 			}
 		} 
 		
 		catch (IOException e) {
 			
 		}
+		this.reinit(address);
 		return false;
 	}
 	private String extract_from_tag(String line, String tag)
@@ -256,6 +263,13 @@ public class FetchSearch {
 		catch (IOException e) {
 			
 		}
+		this.reinit(movie.getImdb_url());
 		return movie;
+	}
+	
+	public String get_url()
+	{
+		return this.address;
+		
 	}
 }
