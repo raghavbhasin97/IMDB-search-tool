@@ -5,7 +5,7 @@ Introduction
 
 A tool that let's you search the IMDB database for a movie, and get details for the closest match. This is a clean and simple to use tool, that works by scraping the IMDB website for details about the required movie. 
 #### Sample use
-![imdb sample run](https://user-images.githubusercontent.com/19142014/27253096-55b6de48-538b-11e7-945f-f046e0a29752.png)
+![imdb sample run](https://user-images.githubusercontent.com/19142014/27253149-98839b20-538c-11e7-961e-0c9c763452a2.png)
 
 Movitation
 ----------
