@@ -11,14 +11,14 @@ public class Main {
 		String url = find_page.scrape_web();
 		if(url == null)
 		{
-			System.out.println("Movie Not Found On IMDB");
+			System.out.println("Movie not found on IMDB");
 			System.exit(0);
 		}
 		System.out.println("Found a page!");
 		System.out.println("Extracting data from the page...");
 		FetchSearch page_data = new FetchSearch(url,false);
-		page_data.read();
-		
+		Movie movie = page_data.get_movie_from_name();
+		System.out.println(movie.toString());
 		
 		s.close();
 

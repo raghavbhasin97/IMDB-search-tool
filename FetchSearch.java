@@ -23,21 +23,21 @@ public class FetchSearch {
 	private final String DATE_TAG = "itemprop=\"datePublished\" content=\"";
 	private final String DURATION_TAG = "itemprop=\"duration\"";
 	private final String KEYWORD_TAG = "itemprop=\"keywords\"";
-	private final String DESCRIPTION_TAG = "itemprop=\"description\"";
+	private final String DESCRIPTION_TAG = "class=\"summary_text\"";
 	private final String QUOTE = "\"";
 	private final String CONTENT = "content=\"";
 	private final String TIME_TAG = "</time>";
 	private final String RATING_TAG = "class=\"rating\"";
 	
 	private boolean do_actor = false;
-	private int num = 0;
+	private int number_of_actors = 0;
 	Movie movie;
 	
 	
-	FetchSearch(String name, boolean is_name)
+	FetchSearch(String name, boolean is_first_param_movie_name)
 	{	
 		String url = name;
-		if(is_name)
+		if(is_first_param_movie_name)
 		{
 		String target = create_search_target(name);
 		url = IMDB_SEARCH + target + "&s=all";
@@ -140,7 +140,7 @@ public class FetchSearch {
 		return im.substring(start, end);
 	}
 	
-	public void read()
+	public Movie get_movie_from_name()
 	{
 		String line = null;
 		
@@ -191,14 +191,18 @@ public class FetchSearch {
 						}catch (Exception e) {}
 					}
 				}
-				else if (line.contains(NAME_TAG) && do_actor )
+				else if (do_actor) 
 				{
-					try{
-						String actor = extract_from_tag(line,NAME_TAG);
-						movie.setActors(actor);
-						num++;
-						if(num > 3) do_actor = false;
-					}catch (Exception e) {}
+				 if (line.contains(NAME_TAG) )
+				{
+					 try{
+							String actor = extract_from_tag(line,NAME_TAG);
+							movie.setActors(actor);
+							number_of_actors++;
+							if(number_of_actors > 8) do_actor = false;
+							
+						}catch (Exception e) {}
+					}
 				}
 				else if(line.contains(GENRE_TAG))
 				{
@@ -220,7 +224,6 @@ public class FetchSearch {
 		catch (IOException e) {
 			
 		}
-		System.out.println("Done! Results ------>");
-		movie.print();
+		return movie;
 	}
 }
