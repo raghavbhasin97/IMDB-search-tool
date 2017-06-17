@@ -20,6 +20,7 @@ public class FetchSearch {
 	private final String GENRE_TAG = "itemprop=\"genre\"";
 	private final String DIRECTOR_TAG = "itemprop=\"director\"";
 	private final String TITLE_TAG = "property=\'og:title\' content=\"";
+	private final String TYPE_TAG = "content=\"video.movie\"";
 	private final String DATE_TAG = "itemprop=\"datePublished\" content=\"";
 	private final String DURATION_TAG = "itemprop=\"duration\"";
 	private final String KEYWORD_TAG = "itemprop=\"keywords\"";
@@ -34,7 +35,7 @@ public class FetchSearch {
 	Movie movie;
 	
 	
-	FetchSearch(String name, boolean is_first_param_movie_name)
+	FetchSearch(String name, boolean is_first_param_movie_name) 
 	{	
 		String url = name;
 		if(is_first_param_movie_name)
@@ -66,7 +67,7 @@ public class FetchSearch {
 	}
 	
 	
-	public String scrape_web()
+	public String scrape_web() throws Exception
 	{
 		String line = null;
 		String data = null;
@@ -86,10 +87,24 @@ public class FetchSearch {
 		catch (IOException e) {
 			
 		}
-		
+		this.reinit(data);
 		return data;
 	}
 	
+	private void reinit(String url) {
+		movie = new Movie();
+		movie.setImdb_url(url);
+		try {
+			host = new URL(url);
+			connection = host.openConnection();
+			reader = new BufferedReader(new InputStreamReader
+			(connection.getInputStream()));
+		} catch (IOException e) {
+			
+		}
+	}
+
+
 	private String create_search_target(String name)
 	{
 		String[] list = name.split(" ");
@@ -130,7 +145,24 @@ public class FetchSearch {
 	}
 	
 
-	
+	public boolean is_a_movie()
+	{ 
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+				
+				if(line.contains(TYPE_TAG)) 
+					return true;
+				
+				
+			}
+		} 
+		
+		catch (IOException e) {
+			
+		}
+		return false;
+	}
 	private String extract_from_tag(String line, String tag)
 	{
 		int start = line.indexOf(tag);
