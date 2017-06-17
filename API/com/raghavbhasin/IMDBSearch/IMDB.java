@@ -8,11 +8,12 @@ import java.net.URLConnection;
 
 
 public class IMDB {
-	private URL host;
-	private URLConnection connection;
-	private BufferedReader reader = null;
+	private URL host, host_search;
+	private URLConnection connection, connection_search;
+	private BufferedReader reader = null,reader_search;
 	private String address = null;
 	
+
 	//HTML TAGS
 	private final String IMDB_SEARCH = "http://www.imdb.com/find?ref_=nv_sr_fn&q=";
 	private final String SEARCH_PARAM = "name=\"tt\"";
@@ -35,6 +36,7 @@ public class IMDB {
 	private final String RATING_TAG = "itemprop=\"ratingValue\"";
 	
 	private boolean do_actor = false;
+	private boolean should_extract = false;
 	private int number_of_actors = 0;
 	private Movie movie = new Movie();
 	
@@ -52,10 +54,10 @@ public class IMDB {
 			movie.setImdb_url(name);
 		}
 		try {
-			host = new URL(url);
-			connection = host.openConnection();
-			reader = new BufferedReader(new InputStreamReader
-			(connection.getInputStream()));
+			host_search = new URL(url);
+			connection_search = host_search.openConnection();
+			reader_search = new BufferedReader(new InputStreamReader
+			(connection_search.getInputStream()));
 		} catch (IOException e) {
 			
 		}
@@ -80,15 +82,15 @@ public class IMDB {
 	{
 		String line = null;
 		String data = null;
-		boolean should_extract = false;
+		
 		
 		try {
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader_search.readLine()) != null) {
 				
 				if(line.contains(SEARCH_PARAM))
 					 should_extract = true;
 				
-				if(line.contains(SEARCH_TAG) && should_extract) {
+				if(should_extract && line.contains(SEARCH_TAG)) {
 					String link = PREFIX_URL + scrape(line);
 					data = link;
 					break;
@@ -100,8 +102,10 @@ public class IMDB {
 		catch (IOException e) {
 			
 		}
-		address = data;
-		reinit(data);
+		if(data != null) {
+			address = data;
+			reinit(data);
+		}
 		return address;
 	}
 	
@@ -285,5 +289,23 @@ public class IMDB {
 	public Movie getExtractedMovie()
 	{
 		return movie;
+	}
+	
+	public boolean nextSearch()
+	{  
+		String org = address;
+		if(org == null)
+			return false;
+	
+		try {
+			scrape_web(); 
+		} catch (Exception e) {
+		}
+		String next = address;
+
+		if(org.equals(next) || next == null)
+			return false;
+		
+	   return true;
 	}
 }
