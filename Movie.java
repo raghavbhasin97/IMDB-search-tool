@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Movie {
-	private String title,description,released,imdb_url,runtime,director;
+	private String title,description,released,imdb_url,runtime,director,rating;
 	private ArrayList<String> genre, actors,keyword;
 	
 	Movie()
@@ -12,6 +12,7 @@ public class Movie {
 	   imdb_url = null;
 	   runtime = null;
 	   director = null;
+	   rating = null;
 	   genre = new ArrayList<String>();
 	   actors = new ArrayList<String>();
 	   keyword = new ArrayList<String>();
@@ -133,12 +134,26 @@ public class Movie {
 		this.keyword.add(keyword);
 	}
 	
+	/**
+	 * @return the rating
+	 */
+	public String getRating() {
+		return rating;
+	}
+
+	/**
+	 * @param rating the rating to set
+	 */
+	public void setRating(String rating) {
+		this.rating = (this.rating == null ? rating:this.rating);
+	}
 	
 	public void print() 
 	{
-		System.out.println("---------\nTitle: " + title);
+		System.out.println("\nTitle: " + title);
 		System.out.println("\nDescription: "+this.description);
 		System.out.println("\nReleased: "+this.released);
+		System.out.println("\nRating: "+this.rating + "/10.0");
 		System.out.println("\nURL: "+this.imdb_url);
 		System.out.println("\nRuntime: " + this.runtime);
 		System.out.println("\nDirector: "+this.director);
@@ -159,4 +174,6 @@ public class Movie {
 		}
 		System.out.println();
 	}
+
+	
 }

@@ -10,9 +10,25 @@ public class FetchSearch {
 	private URLConnection connection;
 	private BufferedReader reader = null;
 	
+	//HTML TAGS
 	private final String IMDB_SEARCH = "http://www.imdb.com/find?ref_=nv_sr_fn&q=";
 	private final String SEARCH_TAG = "/title/";
 	private final String PREFIX_URL = "http://www.imdb.com";
+	private final String LANG = "<";
+	private final String RANG = ">";
+	private final String NAME_TAG = "itemprop=\"name\"";
+	private final String GENRE_TAG = "itemprop=\"genre\"";
+	private final String DIRECTOR_TAG = "itemprop=\"director\"";
+	private final String TITLE_TAG = "property=\'og:title\' content=\"";
+	private final String DATE_TAG = "itemprop=\"datePublished\" content=\"";
+	private final String DURATION_TAG = "itemprop=\"duration\"";
+	private final String KEYWORD_TAG = "itemprop=\"keywords\"";
+	private final String DESCRIPTION_TAG = "itemprop=\"description\"";
+	private final String QUOTE = "\"";
+	private final String CONTENT = "content=\"";
+	private final String TIME_TAG = "</time>";
+	private final String RATING_TAG = "class=\"rating\"";
+	
 	private boolean do_actor = false;
 	private int num = 0;
 	Movie movie;
@@ -45,7 +61,7 @@ public class FetchSearch {
 	{
 		int start = line.indexOf(SEARCH_TAG);
 		String intm = line.substring(start);
-		int end = line.indexOf(">") - 1;
+		int end = line.indexOf(RANG) - 1;
 		return intm.substring(0, end);
 	}
 	
@@ -84,66 +100,43 @@ public class FetchSearch {
 		}
 		return res.substring(1);
 	}
-	private String get_keyword(String line)
-	{
-		int start = line.indexOf("itemprop=\"keywords\"");
-		String im = line.substring(start);
-		start = im.indexOf(">") + 1;
-		int end = im.indexOf("<");
-		return im.substring(start, end);
-	}
-	
+
 	private String get_time(String line)
 	{
-		int start = line.indexOf(">") + 1;
+		int start = line.indexOf(RANG) + 1;
 		String im = line.substring(start);
-		int end = im.indexOf("</time>");
+		int end = im.indexOf(TIME_TAG);
 		return im.substring(0,end);
 	}
 	
 	private String get_released(String line)
 	{
-		int start = line.indexOf("content=\"");
+		int start = line.indexOf(CONTENT);
 		String intermediate_string = line.substring(start);
-		start = intermediate_string.indexOf("\"") + 1;
+		start = intermediate_string.indexOf(QUOTE) + 1;
 		intermediate_string = intermediate_string.substring(start);
-		int end = intermediate_string.indexOf("\"");
+		int end = intermediate_string.indexOf(QUOTE);
 		return intermediate_string.substring(0, end);
 	}
 	
 	private String get_title(String line)
 	{
-		int start = line.indexOf("property=\'og:title\' content=\"");
+		int start = line.indexOf(TITLE_TAG);
 		String im = line.substring(start);
-		start = im.indexOf("\"") + 1;
+		start = im.indexOf(QUOTE) + 1;
 		im = im.substring(start);
-		int end = im.indexOf("\"");
+		int end = im.indexOf(QUOTE);
 		return im.substring(0, end);
 	}
 	
-	private String get_director(String line)
-	{
-		int start = line.indexOf("itemprop=\"name\"");
-		String im = line.substring(start);
-		 start = im.indexOf(">") + 1;
-		int end = im.indexOf("<");
-		return im.substring(start, end);
-	}
-	private String get_actor(String line)
-	{
-		int start = line.indexOf("itemprop=\"name\"");
-		String im = line.substring(start);
-		start = im.indexOf(">") + 1;
-		int end = im.indexOf("<");
-		return im.substring(start, end);
-	}
+
 	
-	private String get_genre(String line)
+	private String extract_from_tag(String line, String tag)
 	{
-		int start = line.indexOf("itemprop=\"genre\"");
+		int start = line.indexOf(tag);
 		String im = line.substring(start);
-		start = im.indexOf(">") + 1;
-		int end = im.indexOf("<");
+		start = im.indexOf(RANG) + 1;
+		int end = im.indexOf(LANG);
 		return im.substring(start, end);
 	}
 	
@@ -153,65 +146,72 @@ public class FetchSearch {
 		
 		try {
 			while ((line = reader.readLine()) != null) {
-				if(line.contains("itemprop=\"description\""))
+				if(line.contains(DESCRIPTION_TAG))
 				{ String des = reader.readLine();
 				  movie.setDescription(des);
 				}
-				else if (line.contains("itemprop=\"keywords\""))
+				else if (line.contains(KEYWORD_TAG))
 				{	
 					try{
-					String key = get_keyword(line);
+					String key = extract_from_tag(line,KEYWORD_TAG);
 					movie.setKeyword(key);
 				  }catch(Exception e) {}
 				}
-				else if (line.contains("itemprop=\"duration\""))
+				else if (line.contains(DURATION_TAG))
 				{
 					try{
 						String time = get_time(line);
 						movie.setRuntime(time);
 					}catch(Exception e) {}
 				}
-				else if(line.contains("itemprop=\"datePublished\" content=\""))
+				else if(line.contains(DATE_TAG))
 				{
 					try{
 						String rel = this.get_released(line);
 						movie.setReleased(rel);
 					}catch(Exception e) {}
 				}
-				else if(line.contains("property=\'og:title\' content=\""))
+				else if(line.contains(TITLE_TAG))
 				{
 					try{
 						String title = this.get_title(line);
 						movie.setTitle(title);
 					}catch(Exception e) {}
 				}
-				else if(line.contains("itemprop=\"director\""))
+				else if(line.contains(DIRECTOR_TAG))
 				{
 					reader.readLine();
 					line = reader.readLine();
-					if(line.contains("itemprop=\"name\""))
+					if(line.contains(NAME_TAG))
 					{
 						try{
-							String dir = get_director(line);
+							String dir = extract_from_tag(line,NAME_TAG);
 							movie.setDirector(dir);
 							do_actor = true;
 						}catch (Exception e) {}
 					}
 				}
-				else if (line.contains("itemprop=\"name\"") && do_actor )
+				else if (line.contains(NAME_TAG) && do_actor )
 				{
 					try{
-						String actor = get_actor(line);
+						String actor = extract_from_tag(line,NAME_TAG);
 						movie.setActors(actor);
 						num++;
 						if(num > 3) do_actor = false;
 					}catch (Exception e) {}
 				}
-				else if(line.contains("itemprop=\"genre\""))
+				else if(line.contains(GENRE_TAG))
 				{
 					try{
-						String genre = get_genre(line);
+						String genre = extract_from_tag(line,GENRE_TAG);
 						movie.setGenre(genre);
+					}catch (Exception e) {}
+				}
+				else if(line.contains(RATING_TAG))
+				{
+					try{
+						String ratings = extract_from_tag(line,RATING_TAG);
+						movie.setRating(ratings);
 					}catch (Exception e) {}
 				}
 			}
@@ -220,6 +220,7 @@ public class FetchSearch {
 		catch (IOException e) {
 			
 		}
+		System.out.println("Done! Results ------>");
 		movie.print();
 	}
 }
