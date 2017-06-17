@@ -1,4 +1,4 @@
-# IMDB Search Toll
+# IMDB Search Tool
 
 Introduction
 ------------
