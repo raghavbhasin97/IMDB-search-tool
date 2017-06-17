@@ -15,6 +15,7 @@ public class IMDB {
 	
 	//HTML TAGS
 	private final String IMDB_SEARCH = "http://www.imdb.com/find?ref_=nv_sr_fn&q=";
+	private final String SEARCH_PARAM = "name=\"tt\"";
 	private final String SEARCH_TAG = "/title/";
 	private final String PREFIX_URL = "http://www.imdb.com";
 	private final String LANG = "<";
@@ -79,11 +80,15 @@ public class IMDB {
 	{
 		String line = null;
 		String data = null;
+		boolean should_extract = false;
 		
 		try {
 			while ((line = reader.readLine()) != null) {
 				
-				if(line.contains(SEARCH_TAG)) {
+				if(line.contains(SEARCH_PARAM))
+					 should_extract = true;
+				
+				if(line.contains(SEARCH_TAG) && should_extract) {
 					String link = PREFIX_URL + scrape(line);
 					data = link;
 					break;
