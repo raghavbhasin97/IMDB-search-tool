@@ -29,17 +29,31 @@ the tool to search IMDB for closest matching mocie pages and set up the readers 
 
 #### Movie Class
 The Movie class represents a Movie object that stores the details about the movie you searched for. A movie has the following components:<br>
-1). Title: The name of the movie<br>
-2). Description: Plot summary for the movie<br>
-3). Release Date: When the movie was released<br>
-4). IMDB URL: IMDB address of the page corresponding to the movie<br>
-5). Runtime: Duration of the movie in Minutes<br>
+1). Title: The name of the movie.<br>
+2). Description: Plot summary for the movie.<br>
+3). Release Date: When the movie was released.<br>
+4). IMDB URL: IMDB address of the page corresponding to the movie.<br>
+5). Runtime: Duration of the movie in Minutes.<br>
 6). Director: Name of the director for the movie.<br>
-7). Rating: How good the movie was on a scale of 1.0 to 10.0<br>
-8). Genres: A list of all the genres that the movie falls under<br>
+7). Rating: How good the movie was on a scale of 1.0 to 10.0.<br>
+8). Genres: A list of all the genres that the movie falls under.<br>
 9). Actors: A list of people who were in the movie (some not all at times).<br>
 10). Keywords: A list of keywords that match the movie search. <br>
 
 
 Features in the API
 -------------------
+#### IMDB Class
+This class provided the main functionality, the methods include, 
+
+1). `isMove()`: Checks if the current page is a movie. <br>
+2). `getMovie()`: Gives back a movie object with all the required data.<br>
+3). `getURL()`: Gets the current page's URL. <br>
+4). `getExtractedMovie()`: Just a security method, which lets you get the movie object again without calling the getMovie() method which will scrape the page again to initialize the object with same data. *Calling this method before the web scrape will return an object with all null fields with an exception of URL field.*
+5). `nextSearch()`: Moves the reader to the next IMDB page found in the search for the movie name. In case of search by URL this return false always.
+
+
+#### Movie Class
+This class can neither be instantiated outside the API, nor can its data be manipulated once set. The only options availible are for fetching the components of a movie. *This is a security feature.*
+
+
