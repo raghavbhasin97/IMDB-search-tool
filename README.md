@@ -49,7 +49,7 @@ This class provided the main functionality, the methods include,
 1). `isMove()`: Checks if the current page is a movie. <br>
 2). `getMovie()`: Gives back a movie object with all the required data.<br>
 3). `getURL()`: Gets the current page's URL. <br>
-4). `getExtractedMovie()`: Just a security method, which lets you get the movie object again without scraping the web again.**Calling this method before the web scrape will return an object with all null fields with an exception of URL field.** <br>
+4). `getExtractedMovie()`: Just a security method, which lets you get the movie object again without scraping the web again.**Calling this method before the `getMovie()` will return an object with all null fields with an exception of URL field.** <br>
 5). `nextSearch()`: Moves the reader to the next IMDB page found in the search for the movie name. In case of search by URL this return false always.
 
 
