@@ -16,7 +16,7 @@ About the API
 
 The API at this moment is designed to only get data for a movie. It does so by scraping the web and finding the required data.
 
-### Classes
+## Classes
 It consists of two major classes with some public methods that provide access to the functionality provided by this tool
 
 #### IMDB Class
