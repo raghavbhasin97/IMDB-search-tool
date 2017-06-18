@@ -17,7 +17,7 @@ About the API
 The API at this moment is designed to only get data for a movie. It does so by scraping the web and finding the required data.
 
 ### Classes
-It consists of two major classes with some public methods that provide acess to the functionality provided by this tool
+It consists of two major classes with some public methods that provide access to the functionality provided by this tool
 
 #### IMDB Class
 Represents an IMDB object that allows scraping the IMDB site in two ways
@@ -30,10 +30,15 @@ the tool to search IMDB for closest matching mocie pages and set up the readers 
 #### Movie Class
 The Movie class represents a Movie object that stores the details about the movie you searched for. A movie has the following components:
   1). Title: The name of the movie
+
   2). Description: Plot summary for the movie
+
   3). Release Date: When the movie was released
+
   4). IMDB URL: IMDB address of the page corresponding to the movie
+
   5). Runtime: Duration of the movie in Minutes
+  
   6). Director: Name of the director for the movie.
   7). Rating: How good the movie was on a scale of 1.0 to 10.0
   8). Genres: A list of all the genres that the movie falls under
