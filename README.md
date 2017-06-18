@@ -29,7 +29,7 @@ the tool to search IMDB for closest matching mocie pages and set up the readers 
 
 #### Movie Class
 The Movie class represents a Movie object that stores the details about the movie you searched for. A movie has the following components:
-1). Title: The name of the movie
+1). Title: The name of the movie<br>
 2). Description: Plot summary for the movie
 3). Release Date: When the movie was released
 4). IMDB URL: IMDB address of the page corresponding to the movie
