@@ -55,6 +55,6 @@ This class provided the main functionality, the methods include,
 
 
 #### Movie Class
-This class can neither be instantiated outside the API, nor can its data be manipulated once set. The only options availible are for fetching the components of a movie. *This is a security feature.*
+This class can neither be instantiated outside the API, nor can its data be manipulated once set. The only options availible are for fetching the components of a movie. **This is a security feature.**
 
 
