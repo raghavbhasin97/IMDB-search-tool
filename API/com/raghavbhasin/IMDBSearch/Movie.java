@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * 6). Director: Name of the director for the movie.
  * 7). Rating: How good the movie was on a scale of 1.0 to 10.0
  * 8). Genres: A list of all the genres that the movie falls under
- * 8). Actors: A list of people who were in the movie (some not all at times).
- * 9). Keywords: A list of keywords that match the movie search.
+ * 9). Actors: A list of people who were in the movie (some not all at times).
+ * 10). Keywords: A list of keywords that match the movie search.
  * 
  * One or more of these fields may be null at times, representing that the
  * data was not found on IMDB site.
