@@ -1,4 +1,4 @@
-# IMDB Search Tool
+# IMDB Search API
 
 Introduction
 ------------
